@@ -1,0 +1,22 @@
+{
+  "name": "purescript-monad-zip",
+  "version": "0.0.1",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-transformers": "^3.4.0"
+    , "purescript-eff": "^3.1.0"
+    , "purescript-tuples": "^4.0.0"
+  },
+  "devDependencies": {
+    "purescript-console": "^3.0.0"
+    , "purescript-spec": "^1.0.0"
+  }
+}
