@@ -38,26 +38,28 @@ import Data.Monoid.Multiplicative (Multiplicative(..))
 --
 class (Monad m) <= MonadZip m where
     mzip :: forall a b. m a -> m b -> m (Tuple a b)
---    mzipWith :: forall a b c. (a -> b -> c) -> m a -> m b -> m c
---    munzip :: forall a b. m (Tuple a b) -> (Tuple (m a) (m b))
+    mzipWith :: forall a b c. (a -> b -> c) -> m a -> m b -> m c
+    munzip :: forall a b. m (Tuple a b) -> (Tuple (m a) (m b))
 
-mzip_ :: forall a b m. (Apply m) => m a -> m b -> m (Tuple a b)
+mzip_ :: forall a b m. (Monad m) => m a -> m b -> m (Tuple a b)
 mzip_ ma mb = Tuple <$> ma <*> mb
 
---mzipWith_ :: forall a b c m. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
---mzipWith_ f ma mb = liftM1 (uncurry f) (mzip ma mb)
+mzipWith_ :: forall a b c m. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
+mzipWith_ f ma mb = liftM1 (uncurry f) (mzip_ ma mb)
 
---munzip_ :: forall a b m. (Monad m) => m (Tuple a b) -> (Tuple (m a) (m b))
---munzip_ mab = Tuple (liftM1 fst mab) (liftM1 snd mab)
+munzip_ :: forall a b m. (Monad m) => m (Tuple a b) -> (Tuple (m a) (m b))
+munzip_ mab = Tuple (liftM1 fst mab) (liftM1 snd mab)
 
 
 instance multiplicativeZip :: MonadZip Multiplicative where
   mzip = mzip_
---  mzipWith = mzipWith_
---  munzip = munzip_
+  mzipWith = mzipWith_
+  munzip = munzip_
 
 instance mayebZip :: MonadZip Maybe where
   mzip = mzip_
+  mzipWith = mzipWith_
+  munzip = munzip_
 
 
 {-
