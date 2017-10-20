@@ -16,11 +16,13 @@ module Control.Monad.Zip where
 import Prelude
 import Control.Monad (class Monad, liftM1, ap)
 import Control.Applicative ((<$>), (<*>))
+import Data.List(List(..), zip, zipWith, unzip)
 import Data.Maybe(Maybe(..))
 import Data.Monoid
 import Data.Tuple (Tuple(..), fst, snd, uncurry)
 
 import Data.Monoid.Multiplicative (Multiplicative(..))
+import Data.Monoid.Additive (Additive(..))
 
 -- | `MonadZip` type class. Minimal definition: `mzip` or `mzipWith`
 --
@@ -56,45 +58,17 @@ instance multiplicativeZip :: MonadZip Multiplicative where
   mzipWith = mzipWith_
   munzip = munzip_
 
-instance mayebZip :: MonadZip Maybe where
+instance maybeZip :: MonadZip Maybe where
   mzip = mzip_
   mzipWith = mzipWith_
   munzip = munzip_
 
+instance additiveZip :: MonadZip Additive where
+  mzip = mzip_
+  mzipWith = mzipWith_
+  munzip = munzip_
 
-{-
--- | @since 4.3.1.0
-instance MonadZip [] where
-    mzip     = zip
-    mzipWith = zipWith
-    munzip   = unzip
-
--- | @since 4.8.0.0
-instance MonadZip Dual where
-    -- Cannot use coerce, it's unsafe
-    mzipWith = ap
-
--- | @since 4.8.0.0
-instance MonadZip Sum where
-    mzipWith = ap
-
--- | @since 4.8.0.0
-instance MonadZip Product where
-    mzipWith = ap
-
--- | @since 4.8.0.0
-instance MonadZip Maybe where
-    mzipWith = ap
-
--- | @since 4.8.0.0
-instance MonadZip First where
-    mzipWith = ap
-
--- | @since 4.8.0.0
-instance MonadZip Last where
-    mzipWith = ap
-
--- | @since 4.8.0.0
-instance MonadZip f => MonadZip (Alt f) where
-    mzipWith f (Alt ma) (Alt mb) = Alt (mzipWith f ma mb)
--}
+instance listZip :: MonadZip List where
+  mzip = zip
+  mzipWith = zipWith
+  munzip = unzip

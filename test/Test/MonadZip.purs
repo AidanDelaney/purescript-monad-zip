@@ -25,8 +25,8 @@ assertionSpec =
            liftM1 (f *** g) (mzip ma mb) `shouldEqual` mzip (liftM1 f ma) (liftM1 g mb)
          it "Information Preservation" $
            munzip (mzip ma mb) `shouldEqual` Tuple ma mb
-         where
-           ma = (Just 1)
-           mb = (Just 2)
-           f = (\x -> x*x)
-           g = (\x -> x+1)
+       where
+         ma = (Just 1)
+         mb = (Just 2)
+         f = (\x -> x*x)
+         g = (\x -> x+1)
