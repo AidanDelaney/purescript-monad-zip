@@ -14,6 +14,7 @@
 module Control.Monad.Zip where
 
 import Prelude
+import Control.Apply (lift2)
 import Control.Monad (class Monad, liftM1, ap)
 import Control.Applicative ((<$>), (<*>))
 import Data.List(List(..), zip, zipWith, unzip)
@@ -44,10 +45,10 @@ class (Monad m) <= MonadZip m where
     munzip :: forall a b. m (Tuple a b) -> (Tuple (m a) (m b))
 
 mzip_ :: forall a b m. (Monad m) => m a -> m b -> m (Tuple a b)
-mzip_ ma mb = Tuple <$> ma <*> mb
+mzip_ = mzipWith_ Tuple
 
 mzipWith_ :: forall a b c m. (Monad m) => (a -> b -> c) -> m a -> m b -> m c
-mzipWith_ f ma mb = liftM1 (uncurry f) (mzip_ ma mb)
+mzipWith_ = lift2
 
 munzip_ :: forall a b m. (Monad m) => m (Tuple a b) -> (Tuple (m a) (m b))
 munzip_ mab = Tuple (liftM1 fst mab) (liftM1 snd mab)
